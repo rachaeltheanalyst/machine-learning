@@ -36,9 +36,9 @@ Python 3.11.4 (main, Jul 5 2023, 09:00:44) [Clang 14.0.6]
 
 I compiled the Kaggle RMSLE score and 10-fold cross validation RMSLE score into a table and found the absolute difference. Based on the results, k = 10 cross validation most accurately estimates the Kaggle score using a multiple regression model. 
 
-![RMSLE Scores Table](../images/table.png)
+![RMSLE Scores Table](Downloads/3-cross-validation-python/images/table.png)
 
-![Boxplot of 10 Estimates of RMSLE of 3 Models](../images/boxplot.png)
+![Boxplot of 10 Estimates of RMSLE of 3 Models](Downloads/3-cross-validation-python/images/boxplot.png)
 
 <a name="source"/></a>
 ## 4. Source
