@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-03-25">
+
+<title>Logistic Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="logistic_regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="logistic_regression_files/libs/quarto-html/quarto.js"></script>
+<script src="logistic_regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="logistic_regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="logistic_regression_files/libs/quarto-html/anchor.min.js"></script>
+<link href="logistic_regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="logistic_regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="logistic_regression_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="logistic_regression_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="logistic_regression_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Logistic Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 25, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="instructions" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Instructions</h1>
+<p>Participate in Kaggle’s <a href="https://www.kaggle.com/c/GiveMeSomeCredit">Give Me Some Credit</a> competition, where among other things you will:</p>
+<ol type="1">
+<li>Fit a logistic regression model to predict who will experience financial distress in the next two years <code>serious_dlqin2yrs</code> as a function of
+<ol type="1">
+<li><code>age</code></li>
+<li><code>number_of_open_credit_lines_and_loans</code></li>
+</ol></li>
+<li>Compute Area under the ROC curve (AUC) as your score</li>
+<li>Perform crossvalidation to obtain an estimate of the Kaggle score</li>
+</ol>
+<section id="suggested-workflow" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="suggested-workflow"><span class="header-section-number">1.1</span> Suggested workflow</h2>
+<ol type="1">
+<li>Render this file and read all instructions</li>
+<li>On Moodle, submit a <code>.zip</code> compressed/archived file of this <strong>entire</strong> RStudio project folder. We are doing this to ensure the graders can reproduce your Quarto file.</li>
+</ol>
+</section>
+<section id="evaluation-criteria" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="evaluation-criteria"><span class="header-section-number">1.2</span> Evaluation criteria</h2>
+<p>Grading will be done on a progressive scale:</p>
+<ol type="1">
+<li>Minimum Viable Product Phase 1 - EDA (6/10)
+<ol type="1">
+<li>Did you complete honor code section?</li>
+<li>Does your Quarto file knit? Submissions that don’t knit for users other than yourself will be penalized harshly. So render early, render often, and ensure reproducibility.</li>
+<li>All questions in this phase</li>
+</ol></li>
+<li>Due Diligence Phase 2 - Fit and submit AUC (7.5/10)</li>
+<li>Phase 3 - Cross validation (9/10)</li>
+<li>Phase 4 - Compare scores (9.5/10)</li>
+<li>Reach for the stars Phase 5 - Linear decision boundary (10/10)</li>
+</ol>
+</section>
+</section>
+<section id="honor-code" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Honor Code</h1>
+<ul>
+<li>Indicate anybody you collaborated with:</li>
+<li>Indicate that you did not directly copy anybody else’s code: I did not directly copy anybody else’s code.</li>
+<li>Indicate that you did not use ChatGPT for this problem set: I did not use ChatGPT for this problem set.</li>
+</ul>
+</section>
+<section id="mvp-phase-1-exploratory-data-analysis" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> MVP Phase 1: Exploratory data analysis</h1>
+<p>Conduct an exploratory data analysis to answer the following questions using informative data visualizations and simple summary statistics:</p>
+<ol type="1">
+<li>If you guessed <code>serious_dlqin2yrs</code> is <code>TRUE</code> for all observations, how often do you expect to be right?</li>
+<li>Does <code>serious_dlqin2yrs</code> have a positive or negative relationship with <code>age</code>?</li>
+<li>Does <code>serious_dlqin2yrs</code> have a positive or negative relationship with <code>number_of_open_credit_lines_and_loans</code>?</li>
+<li>Optional: Create a single visualization that shows the relationship of all three variables</li>
+</ol>
+<p>First, let’s convert <code>serious_dlqin2yrs</code> to a boolean variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>training<span class="sc">$</span>serious_dlqin2yrs_logical <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(training<span class="sc">$</span>serious_dlqin2yrs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="eda-of-outcome-variable" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="eda-of-outcome-variable"><span class="header-section-number">3.1</span> EDA of outcome variable</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> serious_dlqin2yrs_logical)) <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"count"</span>) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"count"</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'In Financial Distress?'</span>, <span class="at">y =</span> <span class="st">'Count'</span>, <span class="at">title =</span> <span class="st">'Count of People Predicted to Experience Financial Distress in the Next Two Years'</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>10026 (number of y = TRUE) / 150000 (total obs) * 100 = 6.68%</p>
+<p>If I guessed <code>serious_dlqin2yrs</code> is <code>TRUE</code> for all observations, I expect to be right for 10026 observations, or 6.68% of the time.</p>
+</section>
+<section id="eda-of-outcome-variable-vs-age" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="eda-of-outcome-variable-vs-age"><span class="header-section-number">3.2</span> EDA of outcome variable vs age</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> serious_dlqin2yrs_logical, <span class="at">y =</span> age)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'In Financial Distress?'</span>, <span class="at">y =</span> <span class="st">'Age'</span>, <span class="at">title =</span> <span class="st">'Ages of People Predicted to Experience Financial Distress in the Next Two Years'</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> serious_dlqin2yrs)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Training data with black points:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Best fitting linear regression line in blue:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"In financial distress?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>age_financial_distress <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> training, serious_dlqin2yrs <span class="sc">~</span> age)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(age_financial_distress)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = serious_dlqin2yrs ~ age, data = training)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.16886 -0.08497 -0.06351 -0.04010  1.02817 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.689e-01  2.356e-03   71.66   &lt;2e-16 ***
+age         -1.951e-03  4.336e-05  -44.99   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2481 on 149998 degrees of freedom
+Multiple R-squared:  0.01331,   Adjusted R-squared:  0.01331 
+F-statistic:  2024 on 1 and 149998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><code>serious_dlqin2yrs</code> has a negative relationship with <code>age</code> because the fitted line in the plot has a negative correlation and the slope in the table of summary statistics is negative.</p>
+</section>
+<section id="eda-of-outcome-variable-vs-credit-lines" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="eda-of-outcome-variable-vs-credit-lines"><span class="header-section-number">3.3</span> EDA of outcome variable vs credit lines</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> serious_dlqin2yrs_logical, <span class="at">y =</span> number_of_open_credit_lines_and_loans)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'In Financial Distress?'</span>, <span class="at">y =</span> <span class="st">'Number of Open Credit Lines and Loans'</span>, <span class="at">title =</span> <span class="st">'Number of Credit Lines of People Predicted to Experience Financial Distress in the Next Two Years'</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_y_continuous(labels = scales::comma) +</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> number_of_open_credit_lines_and_loans, <span class="at">y =</span> serious_dlqin2yrs)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Training data with black points:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Best fitting linear regression line in blue:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Number of Open Credit Lines and Loans"</span>, <span class="at">y =</span> <span class="st">"In financial distress?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>credit_lines_financial_distress <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> training, serious_dlqin2yrs <span class="sc">~</span> number_of_open_credit_lines_and_loans)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(credit_lines_financial_distress)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = serious_dlqin2yrs ~ number_of_open_credit_lines_and_loans, 
+    data = training)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.07901 -0.07181 -0.06749 -0.06173  1.00306 
+
+Coefficients:
+                                        Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                            0.0790110  0.0012395   63.74   &lt;2e-16
+number_of_open_credit_lines_and_loans -0.0014399  0.0001253  -11.50   &lt;2e-16
+                                         
+(Intercept)                           ***
+number_of_open_credit_lines_and_loans ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2496 on 149998 degrees of freedom
+Multiple R-squared:  0.0008802, Adjusted R-squared:  0.0008736 
+F-statistic: 132.1 on 1 and 149998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><code>serious_dlqin2yrs</code> has a negative relationship with <code>number_of_open_credit_lines_and_loans</code> because the fitted line in the plot has a negative correlation and the slope in the table of summary statistics is negative.</p>
+</section>
+<section id="optional-eda-of-outcome-variable-vs-both-predictor-variables" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="optional-eda-of-outcome-variable-vs-both-predictor-variables"><span class="header-section-number">3.4</span> Optional: EDA of outcome variable vs both predictor variables</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> number_of_open_credit_lines_and_loans, <span class="at">color =</span> serious_dlqin2yrs_logical)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Age'</span>, <span class="at">y =</span> <span class="st">'Number of Open Credit Lines and Loans'</span>, <span class="at">title =</span> <span class="st">'Number of Credit Lines and Ages of People Predicted to Experience Financial Distress in the Next Two Years'</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="due-diligence-phase-2-logistic-regression-model" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Due Diligence Phase 2: Logistic regression model</h1>
+<ol type="1">
+<li>Fit the corresponding logistic regression model to all the training data. Use the <code>broom::tidy()</code> function on the fitted model with <code>conf.int=TRUE</code> to show the confidence intervals. You can sanity check your answers to the EDA with these values.</li>
+<li>Obtain the AUC score of the model on the training data</li>
+<li>Predict the outcome for the test data and get a Kaggle score. Your score is the private score, not the public one.</li>
+</ol>
+<p>Notes:</p>
+<ol type="1">
+<li>You will add all AUC scores to a table later on.</li>
+<li>I suggest you do an EDA of your predicted/fitted values if you encounter issues</li>
+</ol>
+<section id="fit-model" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="fit-model"><span class="header-section-number">4.1</span> Fit Model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>model_logistic <span class="ot">&lt;-</span> <span class="fu">glm</span>(serious_dlqin2yrs <span class="sc">~</span> age <span class="sc">+</span> number_of_open_credit_lines_and_loans, <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_logistic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = serious_dlqin2yrs ~ age + number_of_open_credit_lines_and_loans, 
+    family = "binomial", data = training)
+
+Coefficients:
+                                        Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)                           -0.9690421  0.0374978 -25.843   &lt;2e-16
+age                                   -0.0329219  0.0007795 -42.233   &lt;2e-16
+number_of_open_credit_lines_and_loans -0.0055264  0.0021695  -2.547   0.0109
+                                         
+(Intercept)                           ***
+age                                   ***
+number_of_open_credit_lines_and_loans *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 73616  on 149999  degrees of freedom
+Residual deviance: 71533  on 149997  degrees of freedom
+AIC: 71539
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract regression table with confidence intervals</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>model_logistic <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  term                 estimate std.error statistic   p.value conf.low conf.high
+  &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)          -0.969    0.0375      -25.8  2.95e-147 -1.04     -0.896  
+2 age                  -0.0329   0.000780    -42.2  0         -0.0345   -0.0314 
+3 number_of_open_cred… -0.00553  0.00217      -2.55 1.09e-  2 -0.00979  -0.00129</code></pre>
+</div>
+</div>
+</section>
+<section id="get-auc-score" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="get-auc-score"><span class="header-section-number">4.2</span> Get AUC score</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>training<span class="sc">$</span>y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_logistic, <span class="at">newdata =</span> training, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">auc</span>(<span class="fu">roc</span>(training<span class="sc">$</span>serious_dlqin2yrs, training<span class="sc">$</span>y_hat))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(auc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area under the curve: 0.636</code></pre>
+</div>
+</div>
+</section>
+<section id="predict-the-outcome-for-test-data" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="predict-the-outcome-for-test-data"><span class="header-section-number">4.3</span> Predict the outcome for test data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>y_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_logistic, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="make-submission-to-kaggle" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="make-submission-to-kaggle"><span class="header-section-number">4.4</span> Make submission to Kaggle</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>submission_logistic <span class="ot">&lt;-</span> test <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Id, y_prob)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>submission_logistic <span class="ot">&lt;-</span> <span class="fu">rename</span>(submission_logistic, <span class="at">Probability =</span> y_prob)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>submission_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 101,503 × 2
+      Id Probability
+   &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1      0.0827
+ 2     2      0.0508
+ 3     3      0.0484
+ 4     4      0.0946
+ 5     5      0.132 
+ 6     6      0.0446
+ 7     7      0.0664
+ 8     8      0.0262
+ 9     9      0.0381
+10    10      0.151 
+# ℹ 101,493 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(submission_logistic, <span class="at">path =</span> <span class="st">"data/submission_logistic.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/auc_logistic.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="phase-3-cross-validation" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Phase 3: Cross validation</h1>
+<p>Use <span class="math inline">\(k=5\)</span> fold cross-validation with a seed value of 76 to set the folds and obtain a local estimate of the Kaggle score. Normally when competing one would compute and cross-validation estimated score first and then compare it to Kaggle true score after, but here we are merely studying rather than actually competing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#training &lt;- training[, !(names(training) %in% c("index", "index.1"))]</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">76</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>num_folds <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">createFolds</span>(training<span class="sc">$</span>serious_dlqin2yrs, <span class="at">k =</span> num_folds, <span class="at">list =</span> <span class="cn">TRUE</span>, <span class="at">returnTrain =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a vector to hold k-fold numbers </span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(training))</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate along folds </span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(folds)) {</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add fold numbers to index vector </span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  index[folds[[i]]] <span class="ot">&lt;-</span> i</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># add the index column to your dataset</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">index =</span> index, training)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize vector to hold 5 auc scores of test_validation</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>auc_score <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, num_folds)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_folds) {</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># initialize test and train validation </span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">==</span> i)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  train_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">!=</span> i)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  model_logistic_CV <span class="ot">&lt;-</span> <span class="fu">glm</span>(serious_dlqin2yrs <span class="sc">~</span> age <span class="sc">+</span> number_of_open_credit_lines_and_loans, <span class="at">data =</span> train_validation_k_fold, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold<span class="sc">$</span>y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_logistic_CV, <span class="at">newdata =</span> test_validation_k_fold, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  auc <span class="ot">&lt;-</span> <span class="fu">auc</span>(<span class="fu">roc</span>(test_validation_k_fold<span class="sc">$</span>serious_dlqin2yrs, test_validation_k_fold<span class="sc">$</span>y_hat))</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>  auc_score[i] <span class="ot">&lt;-</span> auc</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>avg_auc <span class="ot">&lt;-</span> <span class="fu">mean</span>(auc_score)</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(avg_auc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6359706</code></pre>
+</div>
+</div>
+</section>
+<section id="phase-4-compare-scores" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Phase 4: Compare scores</h1>
+<p>Fill in this table with the three AUC’s of your fitted model you computed</p>
+<ol type="1">
+<li>Would you say the three scores are similar or very different? The three scores are very similar.</li>
+<li>Why? The score on the training data is just slightly better than the one predicted on test data, which means that the model is fitted well on the training data and thus, generalizes well to unseen test data. The 5-fold estimated AUC is close to the AUC on training data, which confirms that the model on the training data is accurate and reliable.</li>
+</ol>
+<table class="table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 40%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>AUC on training data</th>
+<th>AUC on test data from Kaggle</th>
+<th>5-fold Estimated AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.636</td>
+<td>0.63418</td>
+<td>0.63597</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reach-for-the-stars-phase-5-decision-boundary" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Reach for the stars Phase 5: Decision boundary</h1>
+<p>In the <a href="https://app.datacamp.com/learn/courses/linear-classifiers-in-python">Linear Classifiers in Python</a> course, Chapter 1, Video 3, Exercise 1, top left graph in they illustrate a <strong>linear decision boundary</strong> that sets the boundary at which the predicted level of a binary variable switches from blue to red when you use a model with two numerical predictors <span class="math inline">\(X_1\)</span> on the x-axis and <span class="math inline">\(X_2\)</span> on the y-axis</p>
+<p><img src="images/decision_boundary.png" class="img-fluid" style="width:75.0%"></p>
+<p>Draw the linear decision boundary for our logistic regression model where:</p>
+<ol type="1">
+<li>x-axis: <code>age</code> from 0 to the maximum age in the training data</li>
+<li>y-axis: <code>number_of_open_credit_lines_and_loans</code> from 0 to the maximum number of lines</li>
+<li>The decision boundary is where the fitted probability <span class="math inline">\(\widehat{p}\)</span> is 0.5</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to return a plot of the linear decision boundary </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>get_linear_decision_boundary <span class="ot">&lt;-</span> <span class="cf">function</span>(p_hat) {</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  log_odds <span class="ot">&lt;-</span> <span class="fu">log</span>(p_hat<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p_hat))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  max_age <span class="ot">&lt;-</span> <span class="fu">max</span>(training<span class="sc">$</span>age)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  max_credit_lines <span class="ot">&lt;-</span> <span class="fu">max</span>(training<span class="sc">$</span>number_of_open_credit_lines_and_loans)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  linear_boundary_points <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age =</span> <span class="dv">0</span><span class="sc">:</span>max_age)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  linear_decision_boundary <span class="ot">&lt;-</span> linear_boundary_points <span class="sc">|&gt;</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age) <span class="sc">|&gt;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">credit_lines =</span> (log_odds<span class="sc">-</span>(model_logistic<span class="sc">$</span>coefficients[<span class="st">'(Intercept)'</span>] <span class="sc">+</span> (model_logistic<span class="sc">$</span>coefficients[<span class="st">'age'</span>] <span class="sc">*</span> age)))<span class="sc">/</span>(model_logistic<span class="sc">$</span>coefficients[<span class="st">'number_of_open_credit_lines_and_loans'</span>])) <span class="sc">|&gt;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(credit_lines <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> credit_lines <span class="sc">&lt;</span> max_credit_lines)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  training<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(training<span class="sc">$</span>y_hat <span class="sc">&gt;</span> p_hat, <span class="st">"red"</span>, <span class="st">"blue"</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> training, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> number_of_open_credit_lines_and_loans)) <span class="sc">+</span> </span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> training<span class="sc">$</span>color) <span class="sc">+</span> </span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'Age'</span>, <span class="at">y =</span> <span class="st">'# Open Credit Lines and Loans'</span>, <span class="at">title =</span> <span class="st">'Linear Decision Boundary'</span>)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#plot</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add points from Dataset 2 to the plot</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  plot <span class="ot">&lt;-</span> plot <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">data =</span> linear_decision_boundary, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> credit_lines), <span class="at">linewidth =</span> <span class="dv">1</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(plot)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="co"># get linear decision boundary with my chosen p_hat</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">get_linear_decision_boundary</span>(<span class="fl">0.0668</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="logistic_regression_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
