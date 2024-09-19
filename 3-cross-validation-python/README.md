@@ -1,6 +1,10 @@
+<p align="center">
+<img src="images/cross-validation.png" height="400"/>
+</p>
+
 # Cross Validation
 
-> Assess the accuracy of 10-fold cross-validation estimates in predicting Kaggle scores using K-Nearest Neighbors, multiple regression, and CART models.
+> An evaluation of 10-fold cross-validation accuracy estimates in predicting Kaggle competition scores using K-Nearest Neighbors, multiple regression, and CART models.
 
 <a name="toc"/></a>
 ## Table of Contents

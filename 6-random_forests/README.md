@@ -1,6 +1,10 @@
+<p align="center">
+<img src="images/random_forests.jpeg" height="400"/>
+</p>
+
 # Random Forests ML Model
 
-> A machine learning model that employs random forests to predict house prices using various predictor variables, with RMSLE used to assess the model's accuracy.
+> A random forests machine learning algorithm is used here to predict house prices based on a diverse set of predictors, with RMSLE ensuring model accuracy.
 
 <a name="toc"/></a>
 ## Table of Contents

@@ -1,6 +1,10 @@
+<p align="center">
+<img src="images/CART.jpeg" height="400"/>
+</p>
+
 # CART ML Model
 
-> A machine learning model that employs CART to predict house prices using various predictor variables, with RMSLE used to assess the model's accuracy.
+> This machine learning model utilizes Classification and Regression Trees (CART) to estimate house prices by analyzing several predictors, with RMSLE assessing the model’s precision.
 
 <a name="toc"/></a>
 ## Table of Contents

@@ -1,6 +1,10 @@
+<p align="center">
+<img src="images/multiple-regression.png" height="400"/>
+</p>
+
 # Multiple Regression ML Model
 
-> A machine learning model that employs multiple regression to predict house prices using various predictor variables, with RMSLE used to assess the model's accuracy.
+> A machine learning model leveraging multiple regression techniques to forecast house prices based on a range of predictor variables, with RMSLE used for accuracy evaluation.
 
 <a name="toc"/></a>
 ## Table of Contents

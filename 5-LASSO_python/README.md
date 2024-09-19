@@ -1,6 +1,10 @@
+<p align="center">
+<img src="images/LASSO.png" height="400"/>
+</p>
+
 # LASSO ML Model
 
-> A machine learning model that employs LASSO to predict house prices using various predictor variables, with RMSLE used to assess the model's accuracy.
+> Employing LASSO regression, this machine learning model predicts house prices by focusing on key predictor variables, with RMSLE measuring performance.
 
 <a name="toc"/></a>
 ## Table of Contents
