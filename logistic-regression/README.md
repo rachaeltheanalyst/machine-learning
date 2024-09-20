@@ -4,7 +4,7 @@
 
 # Logistic Regression ML Model
 
-> A machine learning model applying logistic regression to predict the likelihood of financial distress within two years, using factors like age and the number of open credit lines and loans, with accuracy gauged by RMSLE.
+> A machine learning model applying logistic regression to predict the likelihood of financial distress within two years, using factors like age and the number of open credit lines and loans, with accuracy gauged by AUC.
 
 <a name="toc"/></a>
 ## Table of Contents
