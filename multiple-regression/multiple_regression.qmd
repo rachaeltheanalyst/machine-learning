@@ -32,7 +32,6 @@ test <- read_csv("data/test.csv")
 sample_submission <- read_csv("data/sample_submission.csv")
 ```
 
-
 # Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/) competition, and implement the following steps:
 
 1.  Fit a multiple regression model involving at least 6 predictor variables, with at least **three categorical variables**.
