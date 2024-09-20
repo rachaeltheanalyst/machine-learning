@@ -41,15 +41,15 @@ RStudio Version 2024.04.1+748 (2024.04.1+748)
 ## 3. Fit Model / Predict
 [Back to ToC](#toc)
 
-We fitted the model on 8 predictor variables selected with a complexity parameter of 0 using the following function on the training data.
+I fitted the model on 8 predictor variables selected with a complexity parameter of 0 using the following function on the training data.
 
 ```bash
 model_CART <- rpart(SalePrice ~ GrLivArea + YearBuilt + BedroomAbvGr + SaleCondition + KitchenQual + MSSubClassClean + HalfBath + LotArea, data = training, cp = 0)
 ```
 
-We calculated the RMSLE for the training data and compared it to the RMSLE provided by Kaggle. As anticipated, the RMSLE for the training data was significantly lower than that for the test data due to overfitting. The model performed well on the training data but struggled to predict accurately on data that differed from the training set.
+I calculated the RMSLE for the training data and compared it to the RMSLE provided by Kaggle. As anticipated, the RMSLE for the training data was significantly lower than that for the test data due to overfitting. The model performed well on the training data but struggled to predict accurately on data that differed from the training set.
 
-After fitting the model, we predicted the sale prices for test data that only included the predictor variables.
+After fitting the model, I predicted the sale prices for test data that only included the predictor variables.
 
 ```bash
 # predict sales price on test using fitted/trained model
@@ -60,11 +60,11 @@ test$SalePrice <- predict(model_CART, newdata = test)
 ## 4. Complexity Parameter
 [Back to ToC](#toc)
 
-We graphed the RMSLE for a range of cp values from 0 to 0.01 to find the optimal cp. 
+I graphed the RMSLE for a range of cp values from 0 to 0.01 to find the optimal cp. 
 
 ![CP Values](images/cp_range.png)
 
-After plotting the RMSLE across a range of cp values, we identified 0.0003808 as the cp with the lowest RMSLE. We then fitted a CART model using this cp value, but the RMSLE returned by Kaggle was higher than the RMSLE when cp was set to 0.
+After plotting the RMSLE across a range of cp values, I identified 0.0003808 as the cp with the lowest RMSLE. We then fitted a CART model using this cp value, but the RMSLE returned by Kaggle was higher than the RMSLE when cp was set to 0.
 
 <a name="cross"/></a>
 ## 5. 10-Fold Cross Validation

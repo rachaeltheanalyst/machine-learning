@@ -37,9 +37,7 @@ sample_submission <- read_csv("data/sampleEntry.csv", show_col_types = FALSE) %>
   clean_names()
 ```
 
-# Instructions
-
-Participate in Kaggle's [Give Me Some Credit](https://www.kaggle.com/c/GiveMeSomeCredit) competition, where among other things you will:
+# Participate in Kaggle's [Give Me Some Credit](https://www.kaggle.com/c/GiveMeSomeCredit) competition, and implement the following steps:
 
 1.  Fit a logistic regression model to predict who will experience financial distress in the next two years `serious_dlqin2yrs` as a function of
     1.  `age`
@@ -47,35 +45,11 @@ Participate in Kaggle's [Give Me Some Credit](https://www.kaggle.com/c/GiveMeSom
 2.  Compute Area under the ROC curve (AUC) as your score
 3.  Perform crossvalidation to obtain an estimate of the Kaggle score
 
-## Suggested workflow
-
-1.  Render this file and read all instructions
-2.  On Moodle, submit a `.zip` compressed/archived file of this **entire** RStudio project folder. We are doing this to ensure the graders can reproduce your Quarto file.
-
-## Evaluation criteria
-
-Grading will be done on a progressive scale:
-
-1.  Minimum Viable Product Phase 1 - EDA (6/10)
-    1.  Did you complete honor code section?
-    2.  Does your Quarto file knit? Submissions that don't knit for users other than yourself will be penalized harshly. So render early, render often, and ensure reproducibility.
-    3.  All questions in this phase
-2.  Due Diligence Phase 2 - Fit and submit AUC (7.5/10)
-3.  Phase 3 - Cross validation (9/10)
-4.  Phase 4 - Compare scores (9.5/10)
-5.  Reach for the stars Phase 5 - Linear decision boundary (10/10)
-
-# Honor Code
-
--   Indicate anybody you collaborated with:
--   Indicate that you did not directly copy anybody else's code: I did not directly copy anybody else's code.
--   Indicate that you did not use ChatGPT for this problem set: I did not use ChatGPT for this problem set.
-
 # MVP Phase 1: Exploratory data analysis
 
-Conduct an exploratory data analysis to answer the following questions using informative data visualizations and simple summary statistics:
+Question to explore after conducting an exploratory data analysis using informative data visualizations and simple summary statistics:
 
-1.  If you guessed `serious_dlqin2yrs` is `TRUE` for all observations, how often do you expect to be right?
+1.  If I guessed `serious_dlqin2yrs` is `TRUE` for all observations, how often do I expect to be right?
 2.  Does `serious_dlqin2yrs` have a positive or negative relationship with `age`?
 3.  Does `serious_dlqin2yrs` have a positive or negative relationship with `number_of_open_credit_lines_and_loans`?
 4.  Optional: Create a single visualization that shows the relationship of all three variables
@@ -165,14 +139,9 @@ ggplot(data = training, aes(x = age, y = number_of_open_credit_lines_and_loans, 
 
 # Due Diligence Phase 2: Logistic regression model
 
-1.  Fit the corresponding logistic regression model to all the training data. Use the `broom::tidy()` function on the fitted model with `conf.int=TRUE` to show the confidence intervals. You can sanity check your answers to the EDA with these values.
+1.  Fit the corresponding logistic regression model to all the training data. Use the `broom::tidy()` function on the fitted model with `conf.int=TRUE` to show the confidence intervals.
 2.  Obtain the AUC score of the model on the training data
-3.  Predict the outcome for the test data and get a Kaggle score. Your score is the private score, not the public one.
-
-Notes:
-
-1.  You will add all AUC scores to a table later on.
-2.  I suggest you do an EDA of your predicted/fitted values if you encounter issues
+3.  Predict the outcome for the test data and get a Kaggle private score.  
 
 ## Fit Model
 
@@ -268,9 +237,9 @@ print(avg_auc)
 
 # Phase 4: Compare scores
 
-Fill in this table with the three AUC's of your fitted model you computed
+Fill in this table with the three AUC's of the fitted model I computed and explore the following questions:
 
-1.  Would you say the three scores are similar or very different? The three scores are very similar.
+1.  Are the three scores similar or very different? The three scores are very similar.
 2.  Why? The score on the training data is just slightly better than the one predicted on test data, which means that the model is fitted well on the training data and thus, generalizes well to unseen test data. The 5-fold estimated AUC is close to the AUC on training data, which confirms that the model on the training data is accurate and reliable.
 
 | AUC on training data | AUC on test data from Kaggle | 5-fold Estimated AUC |

@@ -25,7 +25,7 @@ In a K-nearest neighbors model, the prediction for a new data point is made by c
 
 I can improve the accuracy of the Kaggle score estimates by performing 10-fold cross-validation. The data was randomly split into 10 folds, with 9 folds used for training (train_validation) and the remaining fold for testing (test_validation). This process was repeated, with each fold taking a turn as the test set. For each fold, I fitted the model on the train_validation data and predicted sales prices on the test_validation data. Finally, I averaged the 10 RMSLE scores to estimate the Kaggle score.
 
-For each of the 3 models, we submit the test data on Kaggle to retrieve an RMSLE score, perform 10-fold cross validation, and find the absolute difference to identify the model that most accurately estimates the true RMSLE score. 
+For each of the 3 models, I submit the test data on Kaggle to retrieve an RMSLE score, perform 10-fold cross validation, and find the absolute difference to identify the model that most accurately estimates the true RMSLE score. 
 
 <a name="technologies"/></a>
 ## 2. Technologies

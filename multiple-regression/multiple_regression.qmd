@@ -32,11 +32,8 @@ test <- read_csv("data/test.csv")
 sample_submission <- read_csv("data/sample_submission.csv")
 ```
 
-------------------------------------------------------------------------
 
-# Instructions
-
-Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/) competition, where among other things you will:
+# Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/) competition, and implement the following steps:
 
 1.  Fit a multiple regression model involving at least 6 predictor variables, with at least **three categorical variables**.
 2.  Justify why you chose these 6 variables and justify why you omitted others.
@@ -45,56 +42,13 @@ Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://w
 5.  Take a screenshot of your Kaggle score and compare it to the score you computed earlier.
 6.  On Moodle, submit a `.zip` compressed/archived file of this entire RStudio project folder. We are doing this to ensure the graders can reproduce your Quarto file.
 
-## Suggested workflow
-
--   Knit this file and read all instructions.
--   Before doing any modeling, perform an exploratory data analysis:
-    -   Read the data dictionary included in `data/data_description.text` and get familiar with all variables
-    -   Look at the raw data values in RStudio's spreadsheet viewer
-    -   Compute summary statistics
-    -   Create data visualizations
--   Take the "minimally viable product" approach to model building. Remember, done is better than perfect.
-
 <center><img src="images/MVP2.png" width="60%"/></center>
-
-## Evaluation criteria
-
-Grading will be done on a progressive scale:
-
-1.  Minimum viable product (passing grade)
-    1.  Does your Quarto file knit? Submissions that don't knit will be penalized harshly. So render early, render often.
-    2.  Did you fit a model with one numerical predictor variable that yields a valid submission on Kaggle?
-    3.  Did you include a screenshot of your Kaggle score and compared it to your estimated score
-2.  Due diligence (next highest grade). All criteria above plus:
-    1.  Did you fit a model with one numerical predictor and one categorical predictor that yields a valid submission on Kaggle?
-3.  Iterating to perfection. All criteria above plus:
-    1.  Did you fit a model with 3 predictor variables?
-    2.  ...
-    3.  Did you fit a model with 6 preditor variables, at least three of which are categorical?
-4.  Point of diminishing returns (highest grade). All criteria above plus:
-    1.  Is your Quarto file polished?
-        -   Don't include superfluous output that the reader doesn't need, doesn't care about, or can't digest.
-        -   All things being equal, readers prefer concise and crisp written explanations, rather than overly long ones.
-        -   Plots: Keep the "ink-to-information" ratio in mind. Ensure your plots have labeled axes and informative titles.
-        -   Use markdown formatting to make your presentation effective.
-        -   Is code cleanly written, well-documented, and well-formatted.
-    2.  Optional: Did you fit a model with more than 6 predictor variables?
-    3.  **"Did you win?"** The least important criteria. The students with the best score wins a small prize!
-
-------------------------------------------------------------------------
-
-# Honor Code
-
--   Indicate anybody you collaborated with:
--   Indicate that you did not use ChatGPT for this problem set: I did not use ChatGPT for this problem set.
-
-------------------------------------------------------------------------
 
 # Exploratory data analysis
 
 ## Choice of variables
 
-Justify why you chose each of your 6 predictor variables here, both in writing and using no more than 6 visualizations.
+Chose six predictor variables and explained the reasons for selecting them.
 
 -   totalSF: According to the scatterplot of total square feet vs. sales price, I found the 2 variables are highly correlated and sales price increases as totalSF increases.
 -   MSZoning: The distributions of pricing are generally different across the categories of zoning. In particular, the distributions of price for FV and RL are higher than the other 3 categories.
@@ -276,7 +230,7 @@ Below is code that writes predictions based on the mean model to a csv file:
 
 $$
 \widehat{y} = \widehat{f}(\vec{x}) = \overline{y}
-$$ Modify this code so that it submits your model's predictions.
+$$ Modify this code to submits the model's predictions.
 
 ```{r}
 # add sales price values to submission file
@@ -289,8 +243,4 @@ write_csv(submission, path = "data/submission.csv")
 
 ## Screenshot of Kaggle score
 
-After making your submission on Kaggle, take a screenshot, and replace the image of my score with the image of yours below.
-
 ![](images/score_screenshot.png){width="100%"}
-
-How does your RMSE based on the training data compare to the RMSE on the test data returned by Kaggle?

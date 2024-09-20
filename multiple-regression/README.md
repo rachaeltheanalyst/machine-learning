@@ -48,19 +48,19 @@ For this model, 6 predictor variables are chosen to fit the model, 3 of which ar
 
 Categorical variables were selected based on the significant differences in sales price distributions among categories, while numerical variables were chosen for their strong correlation with sales price. 
 
-We also considered several other variables, but they were excluded due to insufficient data, weaker correlations with sales price compared to the selected variables, or similar sales price distributions across categories for categorical variables.
+I also considered several other variables, but they were excluded due to insufficient data, weaker correlations with sales price compared to the selected variables, or similar sales price distributions across categories for categorical variables.
 
 <a name="fit"/></a>
 ## 4. Fit Model / Predict
 [Back to ToC](#toc)
 
-We fitted the model on the six predictor variables selected through exploratory data analysis using the following function on the training data.
+I fitted the model on the six predictor variables selected through exploratory data analysis using the following function on the training data.
 
 ```bash
 SalePrice_model <- lm(SalePrice ~ totalSF + MSZoning + Utilities + Neighborhood + YearBuilt + outdoorEntArea, data = training)
 ```
 
-After fitting the model, we predicted the sale prices for test data that only included the predictor variables.
+After fitting the model, I predicted the sale prices for test data that only included the predictor variables.
 
 ```bash
 test$SalePrice <- predict(SalePrice_model, newdata = test)

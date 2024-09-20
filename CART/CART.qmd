@@ -33,56 +33,18 @@ test <- read_csv("data/test.csv", show_col_types = FALSE)
 sample_submission <- read_csv("data/sample_submission.csv", show_col_types = FALSE)
 ```
 
-# Instructions
-
-Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/) competition, where among other things you will:
+# Participate in Kaggle's [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/) competition, and implement the following steps:
 
 1.  Fit CART models, specifically regression models to a continuous outcome variable y
 2.  Compare different *estimates* of the RMSLE score on the test data returned by Kaggle
-3.  Study how the complexity parameter cp affects the various RMSLE scores we can compute. This is the $\alpha$ parameter from the equation that CART tries to minimize for numerical y $RSS + \alpha |T|$. Note such parameters that control the degree of learning are also called "hyperparameters"
-4.  Identify an **optimal** cp to make a Kaggle submission to.
-
-## Suggested workflow
-
-1.  Knit this file and read all instructions
-2.  This problem set is **a step up in complexity**. Follow the Minimally Viable Product approach
-3.  On Moodle, submit a `.zip` compressed/archived file of this **entire** RStudio project folder. We are doing this to ensure the graders can reproduce your Quarto file.
+3.  Studying the impact of the complexity parameter (cp) on RMSLE scores. This parameter, $\alpha$, helps minimize the CART objective function $RSS + \alpha |T|$, and is key for controlling the model's learning complexity (also known as a hyperparameter)
+4.  Optimizing the cp parameter to achieve the best RMSLE score for submission and validation
 
 <center><img src="images/MVP2.png" width="60%"/></center>
 
-## Evaluation criteria
-
-Grading will be done on a progressive scale:
-
-1.  Minimum Viable Product Phase 1 (6/10)
-    1.  Did you complete honor code section?
-    2.  Does your Quarto file knit? Submissions that don't knit will be penalized harshly. So render early, render often.
-    3.  All questions in this phase
-2.  Due Diligence Phase 2 (7/10)
-    1.  Successful completion of all previous phases
-    2.  All questions in this phase
-3.  Phase 3 (8/10)
-    1.  Successful completion of all previous phases
-    2.  All questions in this phase
-4.  Phase 4 (9/10)
-    1.  Successful completion of all previous phases
-    2.  All questions in this phase
-5.  Phase 5 (9.5/10)
-    1.  Successful completion of all previous phases
-    2.  All questions in this phase
-6.  Point of Diminished Returns Phase 6 (10/10)
-    1.  Successful completion of all previous phases
-    2.  All questions in this phase
-
-# Honor Code
-
--   Indicate anybody you collaborated with:
--   Indicate that you did not directly copy anybody else's code: I did not directly copy anybody else's code.
--   Indicate that you did not use ChatGPT for this problem set: I did not use ChatGPT for this problem set.
-
 # Model using previously seen variables
 
-Here are the variables we'll use in our CART model:
+Here are the variables I use in the CART model:
 
 1.  Outcome variable `SalePrice` directly i.e. don't log-transform it
 2.  The 6 predictor variables from the PS1 solutions
@@ -132,12 +94,11 @@ rpart.plot(model_CART)
 
 ## Compute scores
 
-Compute and write your scores here:
-
 -   Training set score: 0.15220
 -   Test set score from Kaggle: 0.20428
 
-Answer this question: Why do we observe the discrepancy between these two scores? The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.
+Question to explore: Why do we observe the discrepancy between these two scores? 
+The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.
 
 ```{r}
 # add predicted values from CART model
@@ -163,15 +124,17 @@ write_csv(submission, path = "data/submission.csv")
 
 # Due Diligence Phase 2: Get a better estimate of the Kaggle score
 
-Using the same model with cp = 0 from above, obtain an *estimate* of the test set score Kaggle returns using the method from the `overfitting.R` lecture. Do not change the random number seed nor the training set split method from `overfitting.R`, so that all submissions will have the same split. Write your scores here:
+Using the same model with cp = 0 from above, obtain an *estimate* of the test set score Kaggle returns using the method from the `overfitting.R` lecture. Do not change the random number seed nor the training set split method from `overfitting.R`, so that all submissions will have the same split.
 
 -   train_validation score: 0.16586
 -   test_validation score: 0.20169
 
-Answer these questions:
+Questions to explore:
 
-1.  Which of the above two scores is the estimate of the Kaggle score? test_validation score
-2.  Is this estimate of the Kaggle score better than the previous one? Why? This estimate of the Kaggle score is slightly better than the previous one because the train split is randomly generated. The randomly generated data mimics unseen data and allows it to build a better model for the test data. Using just the test data exposes the model to new characteristics that the model is not familiar with.
+1.  Which of the above two scores is the estimate of the Kaggle score? 
+The test_validation score
+2.  Is this estimate of the Kaggle score better than the previous one? Why? 
+This estimate of the Kaggle score is slightly better than the previous one because the train split is randomly generated. The randomly generated data mimics unseen data and allows it to build a better model for the test data. Using just the test data exposes the model to new characteristics that the model is not familiar with.
 
 ```{r}
 # set seed
@@ -206,18 +169,20 @@ rmsle_train_validation <- sqrt((sum((log(train_validation$SalePrice_hat + 1) - l
 rmsle_test_validation <- sqrt((sum((log(test_validation$SalePrice_hat + 1) - log(test_validation$SalePrice + 1))^2))/(nrow(test_validation)))
 ```
 
-# Phase 3: Using a different cp value
+# Due Diligence Phase 3: Using a different cp value
 
-Choose any different value of cp and obtain a new estimate of the Kaggle score. Write your scores here:
+Choose any different value of cp and obtain a new estimate of the Kaggle score.
 
 After choosing cp = 0.05, I got the following scores:
 -   train_validation score: 0.27760
 -   test_validation score: 0.25121
 
-Answer these questions:
+Questions to explore:
 
-1.  **Without** making a submission to Kaggle to see your actual score, which cp value would you use for your Kaggle submission? cp = 0 or your new value? New value
-2.  Why? I would use the model of cp = 0.05 because too much complexity when cp = 0 has many drawbacks. The overly complex CART model does not predict well to unseen data due to overfitting and leads to expensive, increased computational costs when cp = 0.
+1.  **Without** making a submission to Kaggle to see your actual score, which cp value would you use for the Kaggle submission? cp = 0 or your new value? 
+The new value
+2.  Why? 
+I would use the model of cp = 0.05 because too much complexity when cp = 0 has many drawbacks. The overly complex CART model does not predict well to unseen data due to overfitting and leads to expensive, increased computational costs when cp = 0.
 
 ```{r}
 # set seed
@@ -252,7 +217,7 @@ rmsle_train_validation_new_cp <- sqrt((sum((log(train_validation_new_cp$SalePric
 rmsle_test_validation_new_cp <- sqrt((sum((log(test_validation_new_cp$SalePrice_hat + 1) - log(test_validation_new_cp$SalePrice + 1))^2))/(nrow(test_validation_new_cp)))
 ```
 
-# Phase 4: Using several different cp values
+# Due Diligence Phase 4: Using several different cp values
 
 1.  Repeat the above process for at least 100 different cp values
 2.  Plot all the scores in a ggplot with the following aesthetics:
@@ -260,7 +225,7 @@ rmsle_test_validation_new_cp <- sqrt((sum((log(test_validation_new_cp$SalePrice_
     2.  y-axis: RMSLE
     3.  color: training vs test set (i.e. your visualization should have two curves of different colors)
 
-Qualitatively describe what you think are the two or three of the most salient patterns in this graph when it comes to understanding model complexity:
+Qualitatively describe what are the two or three of the most salient patterns in this graph when it comes to understanding model complexity:
 
 1.  The rmsle remains constant (test = 0.38, train = 0.44) when cp \> 0.35 for the training and test set.
 
@@ -401,14 +366,18 @@ cp_star <- minima$cp
 print(cp_star)
 ```
 
-# Phase 5: Choosing an optimal cp
+# Due Diligence Phase 5: Choosing an optimal cp
 
-Based on your results in the previous section, identify the "optimal" cp to use and make a submission to kaggle using this value of cp and obtain your score. Write the following values:
+Based on the results in the previous section, identify the "optimal" cp to use and make a submission to kaggle using this value of cp and obtain the score.
 
-1.  What is your optimal cp value? 0.0003808
-2.  What is your estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 0.19938
-3.  What is the actual Kaggle score associated with this optimal cp value? 0.20718
-4.  Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? ( No need to answer why.) The Kaggle score for cp = 0 is better.
+1.  What is the optimal cp value? 
+0.0003808
+2.  What is the estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 
+0.19938
+3.  What is the actual Kaggle score associated with this optimal cp value? 
+0.20718
+4.  Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? 
+The Kaggle score for cp = 0 is better.
 
 ```{r}
 # create CART model with optimal cp chosen to balance complexity and fit 
@@ -428,9 +397,7 @@ submission_optimal_cp <- sample_submission %>%
 write_csv(submission_optimal_cp, path = "data/submission_optimal_cp_v2.csv")
 ```
 
-## Make Kaggle submission and post screenshot
-
-After making your submission on Kaggle, take a screenshot, and replace the image of my score with the image of yours below.
+## Make Kaggle submission
 
 ![](images/score_screenshot_v3.png){width="100%"}
 
