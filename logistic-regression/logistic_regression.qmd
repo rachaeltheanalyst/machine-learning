@@ -1,7 +1,7 @@
 ---
 title: "Logistic Regression"
 date: "Last updated on `r Sys.Date()`"
-format: html
+format: pdf
 editor: visual
 theme: cosmo
 number-sections: true

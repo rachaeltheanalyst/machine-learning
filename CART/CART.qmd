@@ -1,7 +1,7 @@
 ---
 title: "Classification and Regression Trees"
 date: "Last updated on `r Sys.Date()`"
-format: html
+format: pdf
 editor: visual
 theme: cosmo
 number-sections: true
@@ -105,6 +105,8 @@ training <- data_frame(training, y_hat = predict(model_CART))
   
 # find rmsle for training data 
 rmsle_training <- sqrt((sum((log(training$y_hat + 1) - log(training$SalePrice + 1))^2))/(nrow(training)))
+
+print(rmsle_training)
 ```
 
 ```{r}
@@ -163,7 +165,11 @@ train_validation <- data_frame(train_validation, SalePrice_hat = predict(model_C
 # find rmsle of train and test split 
 rmsle_train_validation <- sqrt((sum((log(train_validation$SalePrice_hat + 1) - log(train_validation$SalePrice + 1))^2))/(nrow(train_validation)))
 
+print(rmsle_train_validation)
+
 rmsle_test_validation <- sqrt((sum((log(test_validation$SalePrice_hat + 1) - log(test_validation$SalePrice + 1))^2))/(nrow(test_validation)))
+
+print(rmsle_test_validation)
 ```
 
 # Due Diligence Phase 3: Using a different cp value
@@ -207,7 +213,11 @@ train_validation_new_cp <- data_frame(train_validation_new_cp, SalePrice_hat = p
 # find rmsle of train and test split 
 rmsle_train_validation_new_cp <- sqrt((sum((log(train_validation_new_cp$SalePrice_hat + 1) - log(train_validation_new_cp$SalePrice + 1))^2))/(nrow(train_validation_new_cp)))
 
+print(rmsle_train_validation_new_cp)
+
 rmsle_test_validation_new_cp <- sqrt((sum((log(test_validation_new_cp$SalePrice_hat + 1) - log(test_validation_new_cp$SalePrice + 1))^2))/(nrow(test_validation_new_cp)))
+
+print(rmsle_test_validation_new_cp)
 ```
 
 # Due Diligence Phase 4: Using several different cp values
