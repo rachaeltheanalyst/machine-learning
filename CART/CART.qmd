@@ -97,8 +97,7 @@ rpart.plot(model_CART)
 -   Training set score: 0.15220
 -   Test set score from Kaggle: 0.20428
 
-Question to explore: Why do we observe the discrepancy between these two scores? 
-The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.
+Question to explore: Why do we observe the discrepancy between these two scores? The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.
 
 ```{r}
 # add predicted values from CART model
@@ -131,10 +130,8 @@ Using the same model with cp = 0 from above, obtain an *estimate* of the test se
 
 Questions to explore:
 
-1.  Which of the above two scores is the estimate of the Kaggle score? 
-The test_validation score
-2.  Is this estimate of the Kaggle score better than the previous one? Why? 
-This estimate of the Kaggle score is slightly better than the previous one because the train split is randomly generated. The randomly generated data mimics unseen data and allows it to build a better model for the test data. Using just the test data exposes the model to new characteristics that the model is not familiar with.
+1.  Which of the above two scores is the estimate of the Kaggle score? The test_validation score
+2.  Is this estimate of the Kaggle score better than the previous one? Why? This estimate of the Kaggle score is slightly better than the previous one because the train split is randomly generated. The randomly generated data mimics unseen data and allows it to build a better model for the test data. Using just the test data exposes the model to new characteristics that the model is not familiar with.
 
 ```{r}
 # set seed
@@ -173,16 +170,12 @@ rmsle_test_validation <- sqrt((sum((log(test_validation$SalePrice_hat + 1) - log
 
 Choose any different value of cp and obtain a new estimate of the Kaggle score.
 
-After choosing cp = 0.05, I got the following scores:
--   train_validation score: 0.27760
--   test_validation score: 0.25121
+After choosing cp = 0.05, I got the following scores: - train_validation score: 0.27760 - test_validation score: 0.25121
 
 Questions to explore:
 
-1.  **Without** making a submission to Kaggle to see your actual score, which cp value would you use for the Kaggle submission? cp = 0 or your new value? 
-The new value
-2.  Why? 
-I would use the model of cp = 0.05 because too much complexity when cp = 0 has many drawbacks. The overly complex CART model does not predict well to unseen data due to overfitting and leads to expensive, increased computational costs when cp = 0.
+1.  **Without** making a submission to Kaggle to see your actual score, which cp value would you use for the Kaggle submission? cp = 0 or your new value? The new value
+2.  Why? I would use the model of cp = 0.05 because too much complexity when cp = 0 has many drawbacks. The overly complex CART model does not predict well to unseen data due to overfitting and leads to expensive, increased computational costs when cp = 0.
 
 ```{r}
 # set seed
@@ -370,14 +363,10 @@ print(cp_star)
 
 Based on the results in the previous section, identify the "optimal" cp to use and make a submission to kaggle using this value of cp and obtain the score.
 
-1.  What is the optimal cp value? 
-0.0003808
-2.  What is the estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 
-0.19938
-3.  What is the actual Kaggle score associated with this optimal cp value? 
-0.20718
-4.  Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? 
-The Kaggle score for cp = 0 is better.
+1.  What is the optimal cp value? 0.0003808
+2.  What is the estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 0.19938
+3.  What is the actual Kaggle score associated with this optimal cp value? 0.20718
+4.  Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? The Kaggle score for cp = 0 is better.
 
 ```{r}
 # create CART model with optimal cp chosen to balance complexity and fit 
@@ -454,6 +443,9 @@ for (i in 1:num_folds) {
 
 # find average among k rmsle scores 
 avg_rmsle <- mean(rmsle_score)
+
+
+print(avg_rmsle)
 ```
 
 The estimated rmsle score of 0.198 is better than the test_validation score of 0.202 when cp = 0.

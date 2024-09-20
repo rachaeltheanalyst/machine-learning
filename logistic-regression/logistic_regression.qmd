@@ -141,7 +141,7 @@ ggplot(data = training, aes(x = age, y = number_of_open_credit_lines_and_loans, 
 
 1.  Fit the corresponding logistic regression model to all the training data. Use the `broom::tidy()` function on the fitted model with `conf.int=TRUE` to show the confidence intervals.
 2.  Obtain the AUC score of the model on the training data
-3.  Predict the outcome for the test data and get a Kaggle private score.  
+3.  Predict the outcome for the test data and get a Kaggle private score.
 
 ## Fit Model
 

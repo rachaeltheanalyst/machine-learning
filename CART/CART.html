@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-02-25">
+<meta name="dcterms.date" content="2024-09-19">
 
 <title>Classification and Regression Trees</title>
 <style>
@@ -93,7 +93,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 25, 2024</p>
+      <p class="date">September 19, 2024</p>
     </div>
   </div>
   
@@ -103,75 +103,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="instructions" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Instructions</h1>
-<p>Participate in Kaggle’s <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/">House Prices: Advanced Regression Techniques</a> competition, where among other things you will:</p>
+<section id="participate-in-kaggles-house-prices-advanced-regression-techniques-competition-and-implement-the-following-steps" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Participate in Kaggle’s <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/">House Prices: Advanced Regression Techniques</a> competition, and implement the following steps:</h1>
 <ol type="1">
 <li>Fit CART models, specifically regression models to a continuous outcome variable y</li>
 <li>Compare different <em>estimates</em> of the RMSLE score on the test data returned by Kaggle</li>
-<li>Study how the complexity parameter cp affects the various RMSLE scores we can compute. This is the <span class="math inline">\(\alpha\)</span> parameter from the equation that CART tries to minimize for numerical y <span class="math inline">\(RSS + \alpha |T|\)</span>. Note such parameters that control the degree of learning are also called “hyperparameters”</li>
-<li>Identify an <strong>optimal</strong> cp to make a Kaggle submission to.</li>
-</ol>
-<section id="suggested-workflow" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="suggested-workflow"><span class="header-section-number">1.1</span> Suggested workflow</h2>
-<ol type="1">
-<li>Knit this file and read all instructions</li>
-<li>This problem set is <strong>a step up in complexity</strong>. Follow the Minimally Viable Product approach</li>
-<li>On Moodle, submit a <code>.zip</code> compressed/archived file of this <strong>entire</strong> RStudio project folder. We are doing this to ensure the graders can reproduce your Quarto file.</li>
+<li>Studying the impact of the complexity parameter (cp) on RMSLE scores. This parameter, <span class="math inline">\(\alpha\)</span>, helps minimize the CART objective function <span class="math inline">\(RSS + \alpha |T|\)</span>, and is key for controlling the model’s learning complexity (also known as a hyperparameter)</li>
+<li>Optimizing the cp parameter to achieve the best RMSLE score for submission and validation</li>
 </ol>
 <center>
 <img src="images/MVP2.png" width="60%">
 </center>
 </section>
-<section id="evaluation-criteria" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="evaluation-criteria"><span class="header-section-number">1.2</span> Evaluation criteria</h2>
-<p>Grading will be done on a progressive scale:</p>
-<ol type="1">
-<li>Minimum Viable Product Phase 1 (6/10)
-<ol type="1">
-<li>Did you complete honor code section?</li>
-<li>Does your Quarto file knit? Submissions that don’t knit will be penalized harshly. So render early, render often.</li>
-<li>All questions in this phase</li>
-</ol></li>
-<li>Due Diligence Phase 2 (7/10)
-<ol type="1">
-<li>Successful completion of all previous phases</li>
-<li>All questions in this phase</li>
-</ol></li>
-<li>Phase 3 (8/10)
-<ol type="1">
-<li>Successful completion of all previous phases</li>
-<li>All questions in this phase</li>
-</ol></li>
-<li>Phase 4 (9/10)
-<ol type="1">
-<li>Successful completion of all previous phases</li>
-<li>All questions in this phase</li>
-</ol></li>
-<li>Phase 5 (9.5/10)
-<ol type="1">
-<li>Successful completion of all previous phases</li>
-<li>All questions in this phase</li>
-</ol></li>
-<li>Point of Diminished Returns Phase 6 (10/10)
-<ol type="1">
-<li>Successful completion of all previous phases</li>
-<li>All questions in this phase</li>
-</ol></li>
-</ol>
-</section>
-</section>
-<section id="honor-code" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Honor Code</h1>
-<ul>
-<li>Indicate anybody you collaborated with:</li>
-<li>Indicate that you did not directly copy anybody else’s code: I did not directly copy anybody else’s code.</li>
-<li>Indicate that you did not use ChatGPT for this problem set: I did not use ChatGPT for this problem set.</li>
-</ul>
-</section>
-<section id="model-using-previously-seen-variables" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Model using previously seen variables</h1>
-<p>Here are the variables we’ll use in our CART model:</p>
+<section id="model-using-previously-seen-variables" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Model using previously seen variables</h1>
+<p>Here are the variables I use in the CART model:</p>
 <ol type="1">
 <li>Outcome variable <code>SalePrice</code> directly i.e.&nbsp;don’t log-transform it</li>
 <li>The 6 predictor variables from the PS1 solutions</li>
@@ -202,11 +148,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>         MSSubClassClean, HalfBath, LotArea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="mvp-phase-1-get-scores-for-training-and-test-data" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> MVP Phase 1: Get scores for training and test data</h1>
+<section id="mvp-phase-1-get-scores-for-training-and-test-data" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> MVP Phase 1: Get scores for training and test data</h1>
 <p>Let’s consider a CART model with the above variables and <code>cp</code> = <span class="math inline">\(\alpha\)</span> = 0. Let’s compute both the real Kaggle score on the test data and our first estimate of this score: the score on the training data.</p>
-<section id="fit-and-visualize" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="fit-and-visualize"><span class="header-section-number">4.1</span> Fit and visualize</h2>
+<section id="fit-and-visualize" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="fit-and-visualize"><span class="header-section-number">3.1</span> Fit and visualize</h2>
 <p>First, fit this model and visualize it using <code>rpart.plot::rpart.plot()</code>, which IMO is an improvement over the base R generic <code>plot()</code> function</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create CART model with cp of 0</span></span>
@@ -219,14 +165,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="compute-scores" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="compute-scores"><span class="header-section-number">4.2</span> Compute scores</h2>
-<p>Compute and write your scores here:</p>
+<section id="compute-scores" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="compute-scores"><span class="header-section-number">3.2</span> Compute scores</h2>
 <ul>
 <li>Training set score: 0.15220</li>
 <li>Test set score from Kaggle: 0.20428</li>
 </ul>
-<p>Answer this question: Why do we observe the discrepancy between these two scores? The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.</p>
+<p>Question to explore: Why do we observe the discrepancy between these two scores? The complex model caters too much to the training model (score is much lower than test), hindering its applicability to other data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add predicted values from CART model</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">data_frame</span>(training, <span class="at">y_hat =</span> <span class="fu">predict</span>(model_CART)) </span>
@@ -248,16 +193,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="due-diligence-phase-2-get-a-better-estimate-of-the-kaggle-score" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Due Diligence Phase 2: Get a better estimate of the Kaggle score</h1>
-<p>Using the same model with cp = 0 from above, obtain an <em>estimate</em> of the test set score Kaggle returns using the method from the <code>overfitting.R</code> lecture. Do not change the random number seed nor the training set split method from <code>overfitting.R</code>, so that all submissions will have the same split. Write your scores here:</p>
+<section id="due-diligence-phase-2-get-a-better-estimate-of-the-kaggle-score" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Due Diligence Phase 2: Get a better estimate of the Kaggle score</h1>
+<p>Using the same model with cp = 0 from above, obtain an <em>estimate</em> of the test set score Kaggle returns using the method from the <code>overfitting.R</code> lecture. Do not change the random number seed nor the training set split method from <code>overfitting.R</code>, so that all submissions will have the same split.</p>
 <ul>
 <li>train_validation score: 0.16586</li>
 <li>test_validation score: 0.20169</li>
 </ul>
-<p>Answer these questions:</p>
+<p>Questions to explore:</p>
 <ol type="1">
-<li>Which of the above two scores is the estimate of the Kaggle score? test_validation score</li>
+<li>Which of the above two scores is the estimate of the Kaggle score? The test_validation score</li>
 <li>Is this estimate of the Kaggle score better than the previous one? Why? This estimate of the Kaggle score is slightly better than the previous one because the train split is randomly generated. The randomly generated data mimics unseen data and allows it to build a better model for the test data. Using just the test data exposes the model to new characteristics that the model is not familiar with.</li>
 </ol>
 <div class="cell">
@@ -300,13 +245,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>rmsle_test_validation <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="fu">sum</span>((<span class="fu">log</span>(test_validation<span class="sc">$</span>SalePrice_hat <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">log</span>(test_validation<span class="sc">$</span>SalePrice <span class="sc">+</span> <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))<span class="sc">/</span>(<span class="fu">nrow</span>(test_validation)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="phase-3-using-a-different-cp-value" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Phase 3: Using a different cp value</h1>
-<p>Choose any different value of cp and obtain a new estimate of the Kaggle score. Write your scores here:</p>
+<section id="due-diligence-phase-3-using-a-different-cp-value" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Due Diligence Phase 3: Using a different cp value</h1>
+<p>Choose any different value of cp and obtain a new estimate of the Kaggle score.</p>
 <p>After choosing cp = 0.05, I got the following scores: - train_validation score: 0.27760 - test_validation score: 0.25121</p>
-<p>Answer these questions:</p>
+<p>Questions to explore:</p>
 <ol type="1">
-<li><strong>Without</strong> making a submission to Kaggle to see your actual score, which cp value would you use for your Kaggle submission? cp = 0 or your new value? New value</li>
+<li><strong>Without</strong> making a submission to Kaggle to see your actual score, which cp value would you use for the Kaggle submission? cp = 0 or your new value? The new value</li>
 <li>Why? I would use the model of cp = 0.05 because too much complexity when cp = 0 has many drawbacks. The overly complex CART model does not predict well to unseen data due to overfitting and leads to expensive, increased computational costs when cp = 0.</li>
 </ol>
 <div class="cell">
@@ -349,8 +294,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>rmsle_test_validation_new_cp <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="fu">sum</span>((<span class="fu">log</span>(test_validation_new_cp<span class="sc">$</span>SalePrice_hat <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">log</span>(test_validation_new_cp<span class="sc">$</span>SalePrice <span class="sc">+</span> <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))<span class="sc">/</span>(<span class="fu">nrow</span>(test_validation_new_cp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="phase-4-using-several-different-cp-values" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Phase 4: Using several different cp values</h1>
+<section id="due-diligence-phase-4-using-several-different-cp-values" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Due Diligence Phase 4: Using several different cp values</h1>
 <ol type="1">
 <li>Repeat the above process for at least 100 different cp values</li>
 <li>Plot all the scores in a ggplot with the following aesthetics:
@@ -360,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>color: training vs test set (i.e.&nbsp;your visualization should have two curves of different colors)</li>
 </ol></li>
 </ol>
-<p>Qualitatively describe what you think are the two or three of the most salient patterns in this graph when it comes to understanding model complexity:</p>
+<p>Qualitatively describe what are the two or three of the most salient patterns in this graph when it comes to understanding model complexity:</p>
 <ol type="1">
 <li><p>The rmsle remains constant (test = 0.38, train = 0.44) when cp &gt; 0.35 for the training and test set.</p></li>
 <li><p>The rmsle is more sensitive when cps are small for both training and test sets.</p></li>
@@ -490,92 +435,117 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="CART_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="768"></p>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>minima <span class="ot">&lt;-</span> rmsle <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">==</span> <span class="st">"test"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(rmsle) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>minima</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+     cp set   rmsle
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+1     0 test  0.202</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rmsle_min <span class="ot">&lt;-</span> minima<span class="sc">$</span>rmsle</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cp_star <span class="ot">&lt;-</span> minima<span class="sc">$</span>cp</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cp_star)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
 </section>
-<section id="phase-5-choosing-an-optimal-cp" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Phase 5: Choosing an optimal cp</h1>
-<p>Based on your results in the previous section, identify the “optimal” cp to use and make a submission to kaggle using this value of cp and obtain your score. Write the following values:</p>
+<section id="due-diligence-phase-5-choosing-an-optimal-cp" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Due Diligence Phase 5: Choosing an optimal cp</h1>
+<p>Based on the results in the previous section, identify the “optimal” cp to use and make a submission to kaggle using this value of cp and obtain the score.</p>
 <ol type="1">
-<li>What is your optimal cp value? 0.058586</li>
-<li>What is your estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 0.27760</li>
-<li>What is the actual Kaggle score associated with this optimal cp value? 0.29392</li>
-<li>Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? ( No need to answer why.) The Kaggle score for cp = 0 is better.</li>
+<li>What is the optimal cp value? 0.0003808</li>
+<li>What is the estimate of the RMSLE score returned by Kaggle associated with this optimal cp value? 0.19938</li>
+<li>What is the actual Kaggle score associated with this optimal cp value? 0.20718</li>
+<li>Which Kaggle score is better? The one for cp = 0 or for your optimal cp value? The Kaggle score for cp = 0 is better.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create CART model with optimal cp chosen to balance complexity and fit </span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>model_CART_optimal_cp <span class="ot">&lt;-</span> <span class="fu">rpart</span>(SalePrice <span class="sc">~</span> GrLivArea <span class="sc">+</span> YearBuilt <span class="sc">+</span> BedroomAbvGr <span class="sc">+</span> SaleCondition <span class="sc">+</span> KitchenQual <span class="sc">+</span> MSSubClassClean <span class="sc">+</span> HalfBath <span class="sc">+</span> LotArea, <span class="at">data =</span> training, <span class="at">cp =</span> <span class="fl">0.05858</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot CART model of optimal cp</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(model_CART_optimal_cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create CART model with optimal cp chosen to balance complexity and fit </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>model_CART_optimal_cp <span class="ot">&lt;-</span> <span class="fu">rpart</span>(SalePrice <span class="sc">~</span> GrLivArea <span class="sc">+</span> YearBuilt <span class="sc">+</span> BedroomAbvGr <span class="sc">+</span> SaleCondition <span class="sc">+</span> KitchenQual <span class="sc">+</span> MSSubClassClean <span class="sc">+</span> HalfBath <span class="sc">+</span> LotArea, <span class="at">data =</span> training, <span class="at">cp =</span> cp_star)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot CART model of optimal cp</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(model_CART_optimal_cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="CART_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
+<p><img src="CART_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="768"></p>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict sales price on test using fitted/trained model</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>SalePrice <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_CART_optimal_cp, <span class="at">newdata =</span> test)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add sales price values to submission file</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>submission_optimal_cp <span class="ot">&lt;-</span> sample_submission <span class="sc">%&gt;%</span> </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SalePrice =</span> test<span class="sc">$</span>SalePrice)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert into file </span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(submission, <span class="at">path =</span> <span class="st">"data/submission_optimal_cp.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict sales price on test using fitted/trained model</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>SalePrice <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_CART_optimal_cp, <span class="at">newdata =</span> test)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add sales price values to submission file</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>submission_optimal_cp <span class="ot">&lt;-</span> sample_submission <span class="sc">%&gt;%</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SalePrice =</span> test<span class="sc">$</span>SalePrice)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert into file </span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(submission_optimal_cp, <span class="at">path =</span> <span class="st">"data/submission_optimal_cp_v2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="make-kaggle-submission-and-post-screenshot" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="make-kaggle-submission-and-post-screenshot"><span class="header-section-number">8.1</span> Make Kaggle submission and post screenshot</h2>
-<p>After making your submission on Kaggle, take a screenshot, and replace the image of my score with the image of yours below.</p>
-<p><img src="images/score_screenshot.png" class="img-fluid" style="width:100.0%"></p>
+<section id="make-kaggle-submission" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="make-kaggle-submission"><span class="header-section-number">7.1</span> Make Kaggle submission</h2>
+<p><img src="images/score_screenshot_v3.png" class="img-fluid" style="width:100.0%"></p>
 </section>
 </section>
-<section id="point-of-diminished-returns-phase-6-improving-kaggle-test-set-score-estimates" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Point of Diminished Returns Phase 6: Improving Kaggle test set score estimates</h1>
+<section id="point-of-diminished-returns-phase-6-improving-kaggle-test-set-score-estimates" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Point of Diminished Returns Phase 6: Improving Kaggle test set score estimates</h1>
 <p>Implement a mechanism for further improving the estimate for the Kaggle score yielded by the train_validation and test_validation split.</p>
 <p>I implemented 10-fold cross validation as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">76</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># define 10 folds for 10-fold cross validation</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>num_folds <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly split the data into 10 folds</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">createFolds</span>(training<span class="sc">$</span>SalePrice, <span class="at">k =</span> num_folds, <span class="at">list =</span> <span class="cn">TRUE</span>, <span class="at">returnTrain =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a vector to hold k-fold numbers </span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(training))</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate along folds </span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(folds)) {</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add fold numbers to index vector </span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  index[folds[[i]]] <span class="ot">&lt;-</span> i</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co"># add the index column to your dataset</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">index =</span> index, training)</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize vector to hold 10 rmsle scores of test_validation</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>rmsle_score <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, num_folds)</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate along k folds </span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_folds) {</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># initialize test and train validation </span></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">==</span> i)</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  train_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">!=</span> i)</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fit a CART model of cp 0 </span></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  model_CART_k_fold <span class="ot">&lt;-</span> <span class="fu">rpart</span>(SalePrice <span class="sc">~</span> GrLivArea <span class="sc">+</span> YearBuilt <span class="sc">+</span> BedroomAbvGr <span class="sc">+</span> SaleCondition <span class="sc">+</span> KitchenQual <span class="sc">+</span> MSSubClassClean <span class="sc">+</span> HalfBath <span class="sc">+</span> LotArea, <span class="at">data =</span> train_validation_k_fold, <span class="at">cp =</span> <span class="dv">0</span>)</span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># predict sales price on test validation using fitted/trained model on train validation </span></span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold<span class="sc">$</span>SalePrice_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_CART_k_fold, <span class="at">newdata =</span> test_validation_k_fold)</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate rmsle score for the ith fold and add it to the rmsle_score vector </span></span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>  rmsle_score[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="fu">sum</span>((<span class="fu">log</span>(test_validation_k_fold<span class="sc">$</span>SalePrice_hat <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">log</span>(test_validation_k_fold<span class="sc">$</span>SalePrice <span class="sc">+</span> <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))<span class="sc">/</span>(<span class="fu">nrow</span>(test_validation_k_fold)))</span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a><span class="co"># find average among k rmsle scores </span></span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>avg_rmsle <span class="ot">&lt;-</span> <span class="fu">mean</span>(rmsle_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">76</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># define 10 folds for 10-fold cross validation</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>num_folds <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly split the data into 10 folds</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">createFolds</span>(training<span class="sc">$</span>SalePrice, <span class="at">k =</span> num_folds, <span class="at">list =</span> <span class="cn">TRUE</span>, <span class="at">returnTrain =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a vector to hold k-fold numbers </span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(training))</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate along folds </span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(folds)) {</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add fold numbers to index vector </span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  index[folds[[i]]] <span class="ot">&lt;-</span> i</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="co"># add the index column to your dataset</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">index =</span> index, training)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize vector to hold 10 rmsle scores of test_validation</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>rmsle_score <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, num_folds)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate along k folds </span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_folds) {</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># initialize test and train validation </span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">==</span> i)</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  train_validation_k_fold <span class="ot">&lt;-</span> training <span class="sc">|&gt;</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">!=</span> i)</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fit a CART model of cp 0 </span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>  model_CART_k_fold <span class="ot">&lt;-</span> <span class="fu">rpart</span>(SalePrice <span class="sc">~</span> GrLivArea <span class="sc">+</span> YearBuilt <span class="sc">+</span> BedroomAbvGr <span class="sc">+</span> SaleCondition <span class="sc">+</span> KitchenQual <span class="sc">+</span> MSSubClassClean <span class="sc">+</span> HalfBath <span class="sc">+</span> LotArea, <span class="at">data =</span> train_validation_k_fold, <span class="at">cp =</span> <span class="dv">0</span>)</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># predict sales price on test validation using fitted/trained model on train validation </span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>  test_validation_k_fold<span class="sc">$</span>SalePrice_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_CART_k_fold, <span class="at">newdata =</span> test_validation_k_fold)</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate rmsle score for the ith fold and add it to the rmsle_score vector </span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>  rmsle_score[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="fu">sum</span>((<span class="fu">log</span>(test_validation_k_fold<span class="sc">$</span>SalePrice_hat <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">log</span>(test_validation_k_fold<span class="sc">$</span>SalePrice <span class="sc">+</span> <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))<span class="sc">/</span>(<span class="fu">nrow</span>(test_validation_k_fold)))</span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a><span class="co"># find average among k rmsle scores </span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>avg_rmsle <span class="ot">&lt;-</span> <span class="fu">mean</span>(rmsle_score)</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(avg_rmsle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.197646</code></pre>
+</div>
 </div>
 <p>The estimated rmsle score of 0.198 is better than the test_validation score of 0.202 when cp = 0.</p>
 </section>
